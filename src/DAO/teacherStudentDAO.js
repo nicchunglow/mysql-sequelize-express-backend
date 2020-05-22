@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 
 const studentInArr = (onlyStudents) => {
   const studentsInArr = onlyStudents.map((eachStudent) => {
-    return eachStudent["students"];
+    return eachStudent["student"];
   });
   return { students: studentsInArr };
 };
@@ -18,7 +18,7 @@ const registerTeacherStudent = async (teacherInput, studentInput) => {
   for (let i = 0; i < studentInput.length; i++) {
     const [registeredStudent, created] = await studentModel.findOrCreate({
       where: {
-        students: studentInput[i],
+        student: studentInput[i],
       },
     });
     await registeredStudent.addTeacher(registeredTeacher);
@@ -33,11 +33,11 @@ const manyTeachersCommonStudent = async (teacherQuery, numberofTeachers) => {
     attributes: ["teacher"],
     include: {
       model: studentModel,
-      attributes: ["students"],
+      attributes: ["student"],
       through: { attributes: [] },
     },
-    group: ["students"],
-    having: Sequelize.literal(`COUNT(students) = ${numberofTeachers}`),
+    group: ["student"],
+    having: Sequelize.literal(`COUNT(student) = ${numberofTeachers}`),
   });
   const onlyStudents = allTeacherStudents[0].students;
   return studentInArr(onlyStudents);
@@ -51,7 +51,7 @@ const singleTeacherStudents = async (teacherQuery) => {
     attributes: ["teacher"],
     include: {
       model: studentModel,
-      attributes: ["students"],
+      attributes: ["student"],
       through: { attributes: [] },
     },
   });

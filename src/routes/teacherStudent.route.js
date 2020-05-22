@@ -1,6 +1,7 @@
 const teacherModel = require("../models/teacher.model");
 const studentModel = require("../models/student.model");
 const express = require("express");
+// const Sequelize = require("sequelize");
 const router = express.Router();
 const {
   registerTeacherStudent,
@@ -15,10 +16,7 @@ const registerStudents = async (req, res, next) => {
     if (!teacherInput || !studentInput) {
       throw new Error("Missing teacher or student input");
     }
-    const registrationSuccessful = await registerTeacherStudent(
-      teacherInput,
-      studentInput
-    );
+    await registerTeacherStudent(teacherInput, studentInput);
     res.status(204).send();
   } catch (err) {
     if (err.message === "Missing teacher or student input") {
