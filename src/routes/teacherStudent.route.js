@@ -32,7 +32,7 @@ const registerStudents = async (req, res, next) => {
   }
 };
 
-const commonStudents = async (req, res, next) => {
+const getCommonStudents = async (req, res, next) => {
   try {
     const teacherQuery = req.query.teacher;
     if (!teacherQuery) {
