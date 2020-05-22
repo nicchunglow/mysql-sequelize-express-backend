@@ -7,6 +7,7 @@ const {
   registerTeacherStudent,
   manyTeachersCommonStudent,
   singleTeacherStudents,
+  suspendingStudent,
 } = require("../DAO/teacherStudentDAO");
 
 const registerStudents = async (req, res, next) => {
@@ -61,23 +62,7 @@ const suspendStudent = async (req, res, next) => {
     if (!studentInput) {
       throw new Error("Missing student input");
     }
-    const suspendingStudent = await studentModel.findOne({
-      where: {
-        student: studentInput,
-      },
-      attributes: ["student", "suspended"],
-    });
-    if (!suspendingStudent) {
-      throw new Error("Student invalid or does not exist.");
-    }
-    const suspendedStudent = await studentModel.update(
-      {
-        suspended: true,
-      },
-      {
-        where: { student: studentInput },
-      }
-    );
+    suspendingStudent(studentInput);
     res.status(204).send();
   } catch (err) {
     if (err.message === "Student invalid or does not exist.") {

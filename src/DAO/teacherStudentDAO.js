@@ -62,8 +62,29 @@ const singleTeacherStudents = async (teacherQuery) => {
   return studentInArr(onlyStudents);
 };
 
+const suspendingStudent = async (studentInput) => {
+  const student = await studentModel.findOne({
+    where: {
+      student: studentInput,
+    },
+    attributes: ["student", "suspended"],
+  });
+  if (!student) {
+    throw new Error("Student invalid or does not exist.");
+  }
+  const suspendedStudent = await studentModel.update(
+    {
+      suspended: true,
+    },
+    {
+      where: { student: studentInput },
+    }
+  );
+};
+
 module.exports = {
   registerTeacherStudent,
   manyTeachersCommonStudent,
   singleTeacherStudents,
+  suspendingStudent,
 };
