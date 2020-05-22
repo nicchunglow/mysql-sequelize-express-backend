@@ -55,7 +55,40 @@ const getCommonStudents = async (req, res, next) => {
   }
 };
 
+const suspendStudent = async (req, res, next) => {
+  const studentInput = req.body.student;
+  try {
+    if (!studentInput) {
+      throw new Error("Missing student input");
+    }
+    const suspendingStudent = await studentModel.findOne({
+      where: {
+        student: studentInput,
+      },
+      attributes: ["student", "suspended"],
+    });
+    if (!suspendingStudent) {
+      throw new Error("Student invalid or does not exist.");
+    }
+    const suspendedStudent = await studentModel.update(
+      {
+        suspended: true,
+      },
+      {
+        where: { student: studentInput },
+      }
+    );
+    res.status(204).send();
+  } catch (err) {
+    if (err.message === "Student invalid or does not exist.") {
+      err.statusCode = 422;
+    }
+    next(err);
+  }
+};
+
 router.post("/register", registerStudents);
 router.get("/commonstudents", getCommonStudents);
+router.post("/suspend", suspendStudent);
 
 module.exports = router;

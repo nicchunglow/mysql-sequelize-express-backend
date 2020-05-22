@@ -10,6 +10,10 @@ const Student = sequelize.define("students", {
       isEmail: { args: true, msg: "Valid email is required" },
     },
   },
+  suspended: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 module.exports = Student;
