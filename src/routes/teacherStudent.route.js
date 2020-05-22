@@ -67,6 +67,6 @@ const getCommonStudents = async (req, res, next) => {
 };
 
 router.post("/register", registerStudents);
-router.get("/commonstudents", commonStudents);
+router.get("/commonstudents", getCommonStudents);
 
 module.exports = router;
