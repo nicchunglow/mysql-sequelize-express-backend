@@ -34,7 +34,7 @@ describe("/api", () => {
   });
   describe("/commonstudents", () => {
     it("GET UNMOCKED should get students registered to single teacher if there is only one teacher", async () => {
-      const sampleTeacher = "nicholas10%40gmail.com";
+      const sampleTeacher = "teacher=nicholas10%40gmail.com";
       const sampleData = {
         students: [
           "studentdick@example.com",
@@ -45,7 +45,19 @@ describe("/api", () => {
         ],
       };
       const response = await request(app)
-        .get(`/api/commonstudents?teacher=${sampleTeacher}`)
+        .get(`/api/commonstudents?${sampleTeacher}`)
+        .send()
+        .expect(200);
+      expect(response.body).toMatchObject(sampleData);
+    });
+    it("GET UNMOCKED should get students registered multiple teachers", async () => {
+      const sampleTeacher =
+        "teacher=nicholas1%40gmail.com&teacher=nicholas2%40gmail.com";
+      const sampleData = {
+        students: ["studentdick@example.com", "studentharry@example.com"],
+      };
+      const response = await request(app)
+        .get(`/api/commonstudents?${sampleTeacher}`)
         .send()
         .expect(200);
       expect(response.body).toMatchObject(sampleData);
