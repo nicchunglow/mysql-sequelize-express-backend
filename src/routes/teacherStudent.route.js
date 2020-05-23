@@ -1,6 +1,3 @@
-// const Sequelize = require("sequelize");
-const teacherModel = require("../models/teacher.model");
-const studentModel = require("../models/student.model");
 const express = require("express");
 const router = express.Router();
 const {
