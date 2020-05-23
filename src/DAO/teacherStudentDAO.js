@@ -99,6 +99,9 @@ const getMentionedStudents = async (notificationInput) => {
     },
     attributes: ["student", "suspended"],
   });
+  if (mentionedStudents.length !== notSuspendedMentionedStudents.length) {
+    throw new Error("Not all students mentioned are found.");
+  }
   return notSuspendedMentionedStudents;
 };
 

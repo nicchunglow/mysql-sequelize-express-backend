@@ -76,18 +76,33 @@ const suspendStudent = async (req, res, next) => {
 };
 
 const retrieveForNotification = async (req, res, next) => {
-  const teacherInput = req.body.teacher;
-  const notificationInput = req.body.notification;
-  const mentionedStudentsResult = await getMentionedStudents(notificationInput);
-  const registeredStudentsResult = await getStudentsRegisteredToTeacher(
-    teacherInput
-  );
-  const validStudents = registeredStudentsResult.concat(
-    mentionedStudentsResult
-  );
-  const studentList = studentsComplilation(validStudents);
-  const recipents = { recipents: studentList };
-  res.status(200).send(recipents);
+  try {
+    const teacherInput = req.body.teacher;
+    const notificationInput = req.body.notification;
+    if (!teacherInput || !notificationInput) {
+      throw new Error("Missing teacher or notification input.");
+    }
+    const mentionedStudentsResult = await getMentionedStudents(
+      notificationInput
+    );
+    const registeredStudentsResult = await getStudentsRegisteredToTeacher(
+      teacherInput
+    );
+    const validStudents = registeredStudentsResult.concat(
+      mentionedStudentsResult
+    );
+    const studentList = studentsComplilation(validStudents);
+    const recipents = { recipents: studentList };
+    res.status(200).send(recipents);
+  } catch (err) {
+    if (
+      err.message === "Missing teacher or notification input." ||
+      "Not all students mentioned are found."
+    ) {
+      err.statusCode = 422;
+    }
+    next(err);
+  }
 };
 
 router.post("/register", registerStudents);
