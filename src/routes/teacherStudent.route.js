@@ -60,12 +60,15 @@ const suspendStudent = async (req, res, next) => {
   const studentInput = req.body.student;
   try {
     if (!studentInput) {
-      throw new Error("Missing student input");
+      throw new Error("Missing student input.");
     }
-    suspendingStudent(studentInput);
+    await suspendingStudent(studentInput);
     res.status(204).send();
   } catch (err) {
-    if (err.message === "Student invalid or does not exist.") {
+    if (
+      err.message === "Missing student input." ||
+      "Student invalid or does not exist."
+    ) {
       err.statusCode = 422;
     }
     next(err);

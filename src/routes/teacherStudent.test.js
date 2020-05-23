@@ -84,11 +84,30 @@ describe("/api", () => {
       const expectedData = {
         student: "studentjon@example.com",
       };
+      const errorMessage = { error: "Teacher input unavailable or invalid." };
       const response = await request(app)
         .post("/api/suspend")
         .send(expectedData)
         .expect(204);
       expect(response).not.toMatchObject(expectedData);
+    });
+    it("POST should throw error when missing student input", async () => {
+      const expectedData = {};
+      const errorMessage = { error: "Missing student input." };
+      const { body: error } = await request(app)
+        .post("/api/suspend")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+    it("POST should throw error when student to suspend does not exist", async () => {
+      const expectedData = { student: "wrong" };
+      const errorMessage = { error: "Student invalid or does not exist." };
+      const { body: error } = await request(app)
+        .post("/api/suspend")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
     });
   });
 });
