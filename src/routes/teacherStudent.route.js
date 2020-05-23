@@ -34,8 +34,8 @@ const getCommonStudents = async (req, res, next) => {
     if (!teacherQuery) {
       throw new Error("No teacher input");
     }
-    const morethanOneTeacher = Array.isArray(teacherQuery);
-    if (morethanOneTeacher) {
+    const moreThanOneTeacher = Array.isArray(teacherQuery);
+    if (moreThanOneTeacher) {
       const listOfStudents = await manyTeachersCommonStudent(
         teacherQuery,
         numberofTeachers

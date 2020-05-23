@@ -63,15 +63,6 @@ const singleTeacherStudents = async (teacherQuery) => {
 };
 
 const suspendingStudent = async (studentInput) => {
-  const student = await studentModel.findOne({
-    where: {
-      student: studentInput,
-    },
-    attributes: ["student", "suspended"],
-  });
-  if (!student) {
-    throw new Error("Student invalid or does not exist.");
-  }
   const suspendedStudent = await studentModel.update(
     {
       suspended: true,
@@ -80,6 +71,9 @@ const suspendingStudent = async (studentInput) => {
       where: { student: studentInput },
     }
   );
+  if (!suspendedStudent) {
+    throw new Error("Student invalid or does not exist.");
+  }
 };
 
 module.exports = {
