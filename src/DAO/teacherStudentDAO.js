@@ -120,8 +120,8 @@ const getStudentsRegisteredToTeacher = async (teacherInput) => {
       through: { attributes: [] },
     },
   });
-  // const studentList = studentsRegisteredToTeacher.students;
-  return studentsRegisteredToTeacher;
+  const studentList = studentsRegisteredToTeacher.students;
+  return studentList;
 };
 module.exports = {
   registerTeacherStudent,

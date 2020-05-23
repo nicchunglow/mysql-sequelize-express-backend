@@ -63,4 +63,12 @@ describe("/api", () => {
       expect(response.body).toMatchObject(sampleData);
     });
   });
+  it("GET should throw error if there is no teacher input", async () => {
+    const errorMessage = { error: "No teacher input" };
+    const { body: error } = await request(app)
+      .get(`/api/commonstudents?teacher=`)
+      .send()
+      .expect(422);
+    expect(error).toMatchObject(errorMessage);
+  });
 });
