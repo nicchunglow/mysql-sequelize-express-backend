@@ -2,7 +2,7 @@ const teacherModel = require("../models/teacher.model");
 const studentModel = require("../models/student.model");
 const Sequelize = require("sequelize");
 
-const studentInArr = (onlyStudents) => {
+const studentsInArr = (onlyStudents) => {
   const studentsInArr = onlyStudents.map((eachStudent) => {
     return eachStudent["student"];
   });
@@ -38,9 +38,13 @@ const manyTeachersCommonStudent = async (teacherQuery, numberofTeachers) => {
     },
     group: ["student"],
     having: Sequelize.literal(`COUNT(student) = ${numberofTeachers}`),
+    plain: true,
   });
-  const onlyStudents = allTeacherStudents[0].students;
-  return studentInArr(onlyStudents);
+  const onlyStudents = allTeacherStudents.students;
+  const studentsInArr = onlyStudents.map((eachStudent) => {
+    return eachStudent["student"];
+  });
+  return { students: studentsInArr };
 };
 
 const singleTeacherStudents = async (teacherQuery) => {
@@ -53,13 +57,14 @@ const singleTeacherStudents = async (teacherQuery) => {
       model: studentModel,
       attributes: ["student"],
       through: { attributes: [] },
+      plain: true,
     },
   });
   if (!oneTeacherStudents) {
     throw new Error("Teacher input unavailable or invalid.");
   }
   const onlyStudents = oneTeacherStudents.students;
-  return studentInArr(onlyStudents);
+  return studentsInArr(onlyStudents);
 };
 
 const suspendingStudent = async (studentInput) => {
