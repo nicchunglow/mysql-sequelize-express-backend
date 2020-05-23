@@ -19,6 +19,18 @@ describe("/api", () => {
           .expect(204);
         expect(response).not.toMatchObject(expectedUserData);
       });
+      it("POST should throw error if there are empty inputs", async () => {
+        const expectedUserData = {
+          teacher: "",
+          students: ["studentjon@example.com", "studenthon@example.com"],
+        };
+        const errorMessage = { error: "Missing teacher or student input" };
+        const { body: error } = await request(app)
+          .post("/api/register")
+          .send(expectedUserData)
+          .expect(422);
+        expect(error).toMatchObject(errorMessage);
+      });
     });
   });
 });

@@ -3,7 +3,7 @@ const app = require("./app");
 const request = require("supertest");
 
 describe("/", () => {
-  test("will display route details in json", async () => {
+  it("will display route details in json", async () => {
     const data = {
       "0": "GET   /",
       "1": "POST   /api/register",
@@ -11,7 +11,7 @@ describe("/", () => {
       "3": "POST   /api/suspend",
       "4": "POST   /api/retrievefornotifications",
     };
-    const { body: response } = await request(app).get("/");
-    expect(response).toMatchObject(data);
+    const response = await request(app).get("/");
+    expect(response.body).toMatchObject(data);
   });
 });
