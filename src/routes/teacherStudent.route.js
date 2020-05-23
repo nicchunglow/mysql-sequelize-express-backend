@@ -94,7 +94,7 @@ const retrieveForNotification = async (req, res, next) => {
     return student["student"];
   });
   const recipents = { receipents: studentInArr };
-  res.send(recipents);
+  res.status(200).send(recipents);
 };
 
 router.post("/register", registerStudents);
