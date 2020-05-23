@@ -71,4 +71,12 @@ describe("/api", () => {
       .expect(422);
     expect(error).toMatchObject(errorMessage);
   });
+  it("GET should throw error if teacher input is unavailable or invalid", async () => {
+    const errorMessage = { error: "Teacher input unavailable or invalid." };
+    const { body: error } = await request(app)
+      .get(`/api/commonstudents?teacher=wrong%40email.com`)
+      .send()
+      .expect(422);
+    expect(error).toMatchObject(errorMessage);
+  });
 });
