@@ -110,4 +110,49 @@ describe("/api", () => {
       expect(error).toMatchObject(errorMessage);
     });
   });
+  describe("/retrievefornotifications", () => {
+    it("POST should retrieve information on students inclusive of mentions", async () => {
+      const expectedData = {
+        teacher: "nicholas10@gmail.com",
+        notification:
+          "Hello students! @solokia2@example.com @solokia3@example.com",
+      };
+      const expectedResult = {
+        recipents: [
+          "studentjon@gmail.com",
+          "solokia3@example.com",
+          "student_only_under_teacher_ken@gmail.com",
+          "solokia2@example.com",
+          "solokia3@example.com",
+        ],
+      };
+
+      const response = await request(app)
+        .post("/api/retrievefornotifications")
+        .send(expectedData)
+        .expect(200);
+      expect(response.body).toMatchObject(expectedResult);
+    });
+    it("POST should throw error when input is empty", async () => {
+      const expectedData = {};
+      const errorMessage = { error: "Missing teacher or notification input." };
+      const { body: error } = await request(app)
+        .post("/api/retrievefornotifications")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+    it("POST should throw error when mentions are unavailable", async () => {
+      const expectedData = {
+        teacher: "nicholas10@gmail.com",
+        notification: "Hello students! @wrongStudent@gmail.com",
+      };
+      const errorMessage = { error: "Not all students mentioned are found." };
+      const { body: error } = await request(app)
+        .post("/api/retrievefornotifications")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+  });
 });
