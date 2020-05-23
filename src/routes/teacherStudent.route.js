@@ -75,6 +75,15 @@ const suspendStudent = async (req, res, next) => {
 const retrieveForNotification = async (req, res, next) => {
   const teacherInput = req.body.teacher;
   const notification = req.body.notification;
+  const mentionedStudents = notification
+    .split(" ")
+    .filter((word) => {
+      return word.indexOf("@") === 0;
+    })
+    .map((studentEmail) => {
+      return studentEmail.substr(1);
+    });
+  // console.log(mentionedStudents)
   const studentsNotSuspended = await teacherModel.findOne({
     where: {
       teacher: teacherInput,
@@ -90,10 +99,11 @@ const retrieveForNotification = async (req, res, next) => {
     },
   });
   const studentList = studentsNotSuspended.students;
-  const studentInArr = studentList.map((student) => {
+  const studentsInArr = studentList.map((student) => {
     return student["student"];
   });
-  const recipents = { receipents: studentInArr };
+  const validStudents = studentsInArr.concat(mentionedStudents);
+  const recipents = { recipents: validStudents };
   res.status(200).send(recipents);
 };
 
