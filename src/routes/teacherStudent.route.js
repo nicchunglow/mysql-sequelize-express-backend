@@ -83,8 +83,16 @@ const retrieveForNotification = async (req, res, next) => {
     .map((studentEmail) => {
       return studentEmail.substr(1);
     });
-  // console.log(mentionedStudents)
-  const studentsNotSuspended = await teacherModel.findOne({
+
+  const notSuspendedMentionedStudents = await studentModel.findAll({
+    where: {
+      student: mentionedStudents,
+      suspended: false,
+    },
+    attributes: ["student", "suspended"],
+  });
+
+  const studentsRegisteredToTeacher = await teacherModel.findOne({
     where: {
       teacher: teacherInput,
     },
@@ -98,12 +106,12 @@ const retrieveForNotification = async (req, res, next) => {
       through: { attributes: [] },
     },
   });
-  const studentList = studentsNotSuspended.students;
-  const studentsInArr = studentList.map((student) => {
+  const studentList = studentsRegisteredToTeacher.students;
+  const validStudents = studentList.concat(notSuspendedMentionedStudents);
+  const studentsInArr = validStudents.map((student) => {
     return student["student"];
   });
-  const validStudents = studentsInArr.concat(mentionedStudents);
-  const recipents = { recipents: validStudents };
+  const recipents = { recipents: studentsInArr };
   res.status(200).send(recipents);
 };
 
