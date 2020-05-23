@@ -1,7 +1,7 @@
+// const Sequelize = require("sequelize");
 const teacherModel = require("../models/teacher.model");
 const studentModel = require("../models/student.model");
 const express = require("express");
-// const Sequelize = require("sequelize");
 const router = express.Router();
 const {
   registerTeacherStudent,
@@ -72,8 +72,34 @@ const suspendStudent = async (req, res, next) => {
   }
 };
 
+const retrieveForNotification = async (req, res, next) => {
+  const teacherInput = req.body.teacher;
+  const notification = req.body.notification;
+  const studentsNotSuspended = await teacherModel.findOne({
+    where: {
+      teacher: teacherInput,
+    },
+    attributes: ["teacher"],
+    include: {
+      model: studentModel,
+      attributes: ["student", "suspended"],
+      where: {
+        suspended: false,
+      },
+      through: { attributes: [] },
+    },
+  });
+  const studentList = studentsNotSuspended.students;
+  const studentInArr = studentList.map((student) => {
+    return student["student"];
+  });
+  const recipents = { receipents: studentInArr };
+  res.send(recipents);
+};
+
 router.post("/register", registerStudents);
 router.get("/commonstudents", getCommonStudents);
 router.post("/suspend", suspendStudent);
+router.post("/retrievefornotifications", retrieveForNotification);
 
 module.exports = router;
