@@ -2,11 +2,11 @@ const teacherModel = require("../models/teacher.model");
 const studentModel = require("../models/student.model");
 const Sequelize = require("sequelize");
 
-const studentsInArr = (onlyStudents) => {
+const studentsComplilation = (onlyStudents) => {
   const studentsInArr = onlyStudents.map((eachStudent) => {
     return eachStudent["student"];
   });
-  return { students: studentsInArr };
+  return studentsInArr;
 };
 
 const registerTeacherStudent = async (teacherInput, studentInput) => {
@@ -41,10 +41,9 @@ const manyTeachersCommonStudent = async (teacherQuery, numberofTeachers) => {
     plain: true,
   });
   const onlyStudents = allTeacherStudents.students;
-  const studentsInArr = onlyStudents.map((eachStudent) => {
-    return eachStudent["student"];
-  });
-  return { students: studentsInArr };
+  const studentList = studentsComplilation(onlyStudents);
+  const formattedStudentList = { students: studentList };
+  return formattedStudentList;
 };
 
 const singleTeacherStudents = async (teacherQuery) => {
@@ -64,7 +63,9 @@ const singleTeacherStudents = async (teacherQuery) => {
     throw new Error("Teacher input unavailable or invalid.");
   }
   const onlyStudents = oneTeacherStudents.students;
-  return studentsInArr(onlyStudents);
+  const studentList = studentsComplilation(onlyStudents);
+  const formattedStudentList = { students: studentList };
+  return formattedStudentList;
 };
 
 const suspendingStudent = async (studentInput) => {
@@ -81,9 +82,50 @@ const suspendingStudent = async (studentInput) => {
   }
 };
 
+const getMentionedStudents = async (notificationInput) => {
+  const mentionedStudents = notificationInput
+    .split(" ")
+    .filter((word) => {
+      return word.indexOf("@") === 0;
+    })
+    .map((studentEmail) => {
+      return studentEmail.substr(1);
+    });
+
+  const notSuspendedMentionedStudents = await studentModel.findAll({
+    where: {
+      student: mentionedStudents,
+      suspended: false,
+    },
+    attributes: ["student", "suspended"],
+  });
+  return notSuspendedMentionedStudents;
+};
+
+const getStudentsRegisteredToTeacher = async (teacherInput) => {
+  const studentsRegisteredToTeacher = await teacherModel.findOne({
+    where: {
+      teacher: teacherInput,
+    },
+    attributes: ["teacher"],
+    include: {
+      model: studentModel,
+      attributes: ["student", "suspended"],
+      where: {
+        suspended: false,
+      },
+      through: { attributes: [] },
+    },
+  });
+  const studentList = studentsRegisteredToTeacher.students;
+  return studentList;
+};
 module.exports = {
   registerTeacherStudent,
   manyTeachersCommonStudent,
   singleTeacherStudents,
   suspendingStudent,
+  getMentionedStudents,
+  getStudentsRegisteredToTeacher,
+  studentsComplilation,
 };

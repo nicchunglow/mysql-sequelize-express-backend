@@ -8,6 +8,9 @@ const {
   manyTeachersCommonStudent,
   singleTeacherStudents,
   suspendingStudent,
+  getMentionedStudents,
+  getStudentsRegisteredToTeacher,
+  studentsComplilation,
 } = require("../DAO/teacherStudentDAO");
 
 const registerStudents = async (req, res, next) => {
@@ -74,44 +77,16 @@ const suspendStudent = async (req, res, next) => {
 
 const retrieveForNotification = async (req, res, next) => {
   const teacherInput = req.body.teacher;
-  const notification = req.body.notification;
-  const mentionedStudents = notification
-    .split(" ")
-    .filter((word) => {
-      return word.indexOf("@") === 0;
-    })
-    .map((studentEmail) => {
-      return studentEmail.substr(1);
-    });
-
-  const notSuspendedMentionedStudents = await studentModel.findAll({
-    where: {
-      student: mentionedStudents,
-      suspended: false,
-    },
-    attributes: ["student", "suspended"],
-  });
-
-  const studentsRegisteredToTeacher = await teacherModel.findOne({
-    where: {
-      teacher: teacherInput,
-    },
-    attributes: ["teacher"],
-    include: {
-      model: studentModel,
-      attributes: ["student", "suspended"],
-      where: {
-        suspended: false,
-      },
-      through: { attributes: [] },
-    },
-  });
-  const studentList = studentsRegisteredToTeacher.students;
-  const validStudents = studentList.concat(notSuspendedMentionedStudents);
-  const studentsInArr = validStudents.map((student) => {
-    return student["student"];
-  });
-  const recipents = { recipents: studentsInArr };
+  const notificationInput = req.body.notification;
+  const mentionedStudentsResult = await getMentionedStudents(notificationInput);
+  const registeredStudentsResult = await getStudentsRegisteredToTeacher(
+    teacherInput
+  );
+  const validStudents = registeredStudentsResult.concat(
+    mentionedStudentsResult
+  );
+  const studentList = studentsComplilation(validStudents);
+  const recipents = { recipents: studentList };
   res.status(200).send(recipents);
 };
 
