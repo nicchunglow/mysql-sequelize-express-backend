@@ -1,6 +1,6 @@
-# ufinity assessment
+# Ufinity assessment
 
-### By Nicholas Chung
+##### By Nicholas Chung
 
 ## Table of Contents
 
@@ -51,7 +51,7 @@ There are four main functionalities:
 
 \- nodemon: 2.0.4
 
-\## Setup
+## Setup
 
 To run this project, git clone and install it locally using npm:
 
