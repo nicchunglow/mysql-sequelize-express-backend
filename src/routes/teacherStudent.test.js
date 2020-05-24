@@ -1,7 +1,5 @@
 const request = require("supertest");
 const app = require("../app");
-const express = require("express");
-const teacherModel = require("../models/teacher.model");
 
 describe("/api", () => {
   afterEach(async () => {

@@ -9,14 +9,14 @@ const registerTeacherStudent = async (teacherInput, studentInput) => {
       teacher: teacherInput,
     },
   });
-  for (let i = 0; i < studentInput.length; i++) {
+  studentInput.forEach(async (student) => {
     const [registeredStudent, created] = await studentModel.findOrCreate({
       where: {
-        student: studentInput[i],
+        student: student,
       },
     });
     await registeredStudent.addTeacher(registeredTeacher);
-  }
+  });
 };
 
 const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
@@ -31,7 +31,7 @@ const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
       through: { attributes: [] },
     },
     group: ["student"],
-    having: Sequelize.literal(`COUNT(student) = ${numberofTeachers}`),
+    having: Sequelize.literal(`count(student) = ${numberofTeachers}`),
     plain: true,
   });
   unavailableTeacherErrorHandler(allTeacherStudents);
@@ -116,6 +116,7 @@ const getStudentsRegisteredToTeacher = async (teacherInput) => {
   const studentList = studentsRegisteredToTeacher.students;
   return studentList;
 };
+
 module.exports = {
   registerTeacherStudent,
   manyTeachersCommonStudents,
