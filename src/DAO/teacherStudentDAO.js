@@ -1,6 +1,7 @@
 const teacherModel = require("../models/teacher.model");
 const studentModel = require("../models/student.model");
 const Sequelize = require("sequelize");
+const { unavailableTeacherErrorHandler } = require("../utils/helperFunctions");
 
 const registerTeacherStudent = async (teacherInput, studentInput) => {
   const [registeredTeacher, created] = await teacherModel.findOrCreate({
@@ -33,9 +34,7 @@ const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
     having: Sequelize.literal(`COUNT(student) = ${numberofTeachers}`),
     plain: true,
   });
-  if (!allTeacherStudents) {
-    throw new Error("Teacher input unavailable or invalid.");
-  }
+  unavailableTeacherErrorHandler(allTeacherStudents);
   const onlyStudents = allTeacherStudents.students;
   return onlyStudents;
 };
@@ -53,9 +52,7 @@ const singleTeacherStudents = async (teacherQuery) => {
       plain: true,
     },
   });
-  if (!oneTeacherStudents) {
-    throw new Error("Teacher input unavailable or invalid.");
-  }
+  unavailableTeacherErrorHandler(oneTeacherStudents);
   const onlyStudents = oneTeacherStudents.students;
 
   return onlyStudents;
@@ -116,6 +113,7 @@ const getStudentsRegisteredToTeacher = async (teacherInput) => {
       through: { attributes: [] },
     },
   });
+  unavailableTeacherErrorHandler(studentsRegisteredToTeacher);
   const studentList = studentsRegisteredToTeacher.students;
   return studentList;
 };

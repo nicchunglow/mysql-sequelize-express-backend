@@ -166,6 +166,19 @@ describe("/api", () => {
         .expect(422);
       expect(error).toMatchObject(errorMessage);
     });
+    it("POST should throw error when teacher input is unavailable", async () => {
+      const expectedData = {
+        teacher: "wrong@teacher.com",
+        notification:
+          "Hello students! @student_only_under_teacher_ken@gmail.com",
+      };
+      const errorMessage = { error: "Teacher input unavailable or invalid." };
+      const { body: error } = await request(app)
+        .post("/api/retrievefornotifications")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
     it("POST should throw error when mentions are unavailable", async () => {
       const expectedData = {
         teacher: "nicholas10@gmail.com",

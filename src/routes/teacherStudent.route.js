@@ -97,11 +97,11 @@ const retrieveForNotification = async (req, res, next) => {
     if (!teacherInput || !notificationInput) {
       throw new Error("Missing teacher or notification input.");
     }
-    const mentionedStudentsResult = await getMentionedStudents(
-      notificationInput
-    );
     const registeredStudentsResult = await getStudentsRegisteredToTeacher(
       teacherInput
+    );
+    const mentionedStudentsResult = await getMentionedStudents(
+      notificationInput
     );
     const validStudents = registeredStudentsResult.concat(
       mentionedStudentsResult
@@ -112,7 +112,8 @@ const retrieveForNotification = async (req, res, next) => {
   } catch (err) {
     if (
       err.message === "Missing teacher or notification input." ||
-      "Not all students mentioned are found."
+      "Not all students mentioned are found." ||
+      "Teacher input unavailable or invalid."
     ) {
       err.statusCode = 422;
     }

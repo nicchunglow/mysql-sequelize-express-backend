@@ -12,4 +12,10 @@ const moreThanOneTeacherErrorHandler = (teacherInput) => {
   }
 };
 
-module.exports = { studentsComplilation, moreThanOneTeacherErrorHandler };
+const unavailableTeacherErrorHandler = (teacherResult) => {
+  if (!teacherResult) {
+    throw new Error("Teacher input unavailable or invalid.");
+  }
+};
+
+module.exports = { studentsComplilation, moreThanOneTeacherErrorHandler , unavailableTeacherErrorHandler};
