@@ -39,7 +39,7 @@ describe("/api", () => {
     });
   });
   describe("/commonstudents", () => {
-    it("GET should get students registered to single teacher if there is only one teacher", async () => {
+    it("GET should retrieve students information registered to the teacher if there is only one teacher", async () => {
       const sampleTeacherQuery = "teacher=teacherken%40gmail.com";
       const sampleTeacher = "teacherken@gmail.com";
       const sampleData = {
@@ -56,7 +56,7 @@ describe("/api", () => {
         .expect(200);
       expect(response.body).toMatchObject(sampleData);
     });
-    it("GET should get students registered multiple teachers", async () => {
+    it("GET should retrieve common students information registered multiple teachers", async () => {
       const sampleTeacher =
         "teacher=teacherken%40gmail.com&teacher=teacherben%40gmail.com";
       const sampleData = {
@@ -76,7 +76,7 @@ describe("/api", () => {
         .expect(422);
       expect(error).toMatchObject(errorMessage);
     });
-    it("GET should throw error if teacher input is unavailable or invalid", async () => {
+    it("GET should throw error if single teacher input is unavailable or invalid", async () => {
       const errorMessage = { error: "Teacher input unavailable or invalid." };
       const { body: error } = await request(app)
         .get(`/api/commonstudents?teacher=wrong%40email.com`)
@@ -137,7 +137,7 @@ describe("/api", () => {
     });
   });
   describe("/retrievefornotifications", () => {
-    it("POST should retrieve students inclusive of mentions, without duplicates", async () => {
+    it("POST should retrieve not suspended students, inclusive of mentions and without duplicates", async () => {
       const expectedData = {
         teacher: "teacherben@gmail.com",
         notification:
@@ -177,7 +177,7 @@ describe("/api", () => {
         .expect(422);
       expect(error).toMatchObject(errorMessage);
     });
-    it("POST should throw error when mentions are unavailable", async () => {
+    it("POST should throw error when mentioned students are unavailable", async () => {
       const expectedData = {
         teacher: "teacherben@gmail.com",
         notification: "Hello students! @wrongStudent@gmail.com",

@@ -1,14 +1,13 @@
 {
   "name": "ufinity-assessment",
   "version": "1.0.0",
-  "description": "",
+  "description": "Teachers need a system where they can perform administrative functions for their students. Teachers and students are identified by their email addresses.",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "start:dev": "nodemon src/index.js",
     "test": "jest",
-    "testc": "jest --coverage",
-    "testband": "jest --runInBand"
+    "testc": "jest --coverage"
   },
   "author": "",
   "license": "ISC",

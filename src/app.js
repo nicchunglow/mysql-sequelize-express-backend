@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
   res.json({
     "0": "GET   /",
     "1": "POST   /api/register",
-    "2": "POST   /api/commonstudents",
+    "2": "GET   /api/commonstudents",
     "3": "POST   /api/suspend",
     "4": "POST   /api/retrievefornotifications",
   });
