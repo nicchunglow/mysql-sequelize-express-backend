@@ -56,7 +56,10 @@ const getCommonStudents = async (req, res, next) => {
     } else {
       const oneTeacherStudents = await singleTeacherStudents(teacherQuery);
       const studentList = studentsComplilation(oneTeacherStudents);
-      const formattedStudentList = formatStudentList(studentList);
+      const formattedStudentList = {
+        teacher: teacherQuery,
+        students: studentList,
+      };
       res.send(formattedStudentList);
     }
   } catch (err) {
