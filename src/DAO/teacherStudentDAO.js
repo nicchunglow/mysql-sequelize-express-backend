@@ -2,13 +2,6 @@ const teacherModel = require("../models/teacher.model");
 const studentModel = require("../models/student.model");
 const Sequelize = require("sequelize");
 
-const studentsComplilation = (onlyStudents) => {
-  const studentsInArr = onlyStudents.map((eachStudent) => {
-    return eachStudent["student"];
-  });
-  return studentsInArr;
-};
-
 const registerTeacherStudent = async (teacherInput, studentInput) => {
   const [registeredTeacher, created] = await teacherModel.findOrCreate({
     where: {
@@ -25,7 +18,7 @@ const registerTeacherStudent = async (teacherInput, studentInput) => {
   }
 };
 
-const manyTeachersCommonStudent = async (teacherQuery, numberofTeachers) => {
+const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
   const allTeacherStudents = await teacherModel.findAll({
     where: {
       teacher: teacherQuery,
@@ -41,9 +34,7 @@ const manyTeachersCommonStudent = async (teacherQuery, numberofTeachers) => {
     plain: true,
   });
   const onlyStudents = allTeacherStudents.students;
-  const studentList = studentsComplilation(onlyStudents);
-  const formattedStudentList = { students: studentList };
-  return formattedStudentList;
+  return onlyStudents;
 };
 
 const singleTeacherStudents = async (teacherQuery) => {
@@ -63,9 +54,8 @@ const singleTeacherStudents = async (teacherQuery) => {
     throw new Error("Teacher input unavailable or invalid.");
   }
   const onlyStudents = oneTeacherStudents.students;
-  const studentList = studentsComplilation(onlyStudents);
-  const formattedStudentList = { students: studentList };
-  return formattedStudentList;
+
+  return onlyStudents;
 };
 
 const suspendingStudent = async (studentInput) => {
@@ -128,10 +118,9 @@ const getStudentsRegisteredToTeacher = async (teacherInput) => {
 };
 module.exports = {
   registerTeacherStudent,
-  manyTeachersCommonStudent,
+  manyTeachersCommonStudents,
   singleTeacherStudents,
   suspendingStudent,
   getMentionedStudents,
   getStudentsRegisteredToTeacher,
-  studentsComplilation,
 };

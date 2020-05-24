@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const { studentsComplilation } = require("../utils/helperFunctions");
 const {
   registerTeacherStudent,
-  manyTeachersCommonStudent,
+  manyTeachersCommonStudents,
   singleTeacherStudents,
   suspendingStudent,
   getMentionedStudents,
   getStudentsRegisteredToTeacher,
-  studentsComplilation,
 } = require("../DAO/teacherStudentDAO");
 
 const registerStudents = async (req, res, next) => {
@@ -36,6 +36,9 @@ const registerStudents = async (req, res, next) => {
 
 const getCommonStudents = async (req, res, next) => {
   const teacherQuery = req.query.teacher;
+  const formatStudentList = (studentList) => {
+    return { students: studentList };
+  };
   try {
     if (!teacherQuery) {
       throw new Error("No teacher input");
@@ -43,14 +46,18 @@ const getCommonStudents = async (req, res, next) => {
     const numberofTeachers = teacherQuery.length;
     const moreThanOneTeacher = Array.isArray(teacherQuery);
     if (moreThanOneTeacher) {
-      const listOfStudents = await manyTeachersCommonStudent(
+      const commonStudents = await manyTeachersCommonStudents(
         teacherQuery,
         numberofTeachers
       );
-      res.send(listOfStudents);
+      const studentList = studentsComplilation(commonStudents);
+      const formattedStudentList = formatStudentList(studentList);
+      res.send(formattedStudentList);
     } else {
-      const listOfStudents = await singleTeacherStudents(teacherQuery);
-      res.send(listOfStudents);
+      const oneTeacherStudents = await singleTeacherStudents(teacherQuery);
+      const studentList = studentsComplilation(oneTeacherStudents);
+      const formattedStudentList = formatStudentList(studentList);
+      res.send(formattedStudentList);
     }
   } catch (err) {
     if (
