@@ -67,9 +67,10 @@ npm start
 
 For users that are new to MySQL, you can choose to use MySQL Workbench for your MySQL Database.
 
-\- Head over to https://dev.mysql.com/downloads/ to download the MySQL according to your computer's OS.
+- Head over to https://dev.mysql.com/downloads/ to download the MySQL according to your computer's OS.
 
-\*note - You may face an issue with MySQL default port unable to set at 3306. Just change to another port number (e.g 3300) and you will be able to continue using MySQL.
+_note_
+You may face an issue with MySQL default port unable to set at 3306. Just change to another port number (e.g 3300) and you will be able to continue using MySQL.
 
 ## Environment Variables
 
@@ -81,7 +82,7 @@ For users that are new to MySQL, you can choose to use MySQL Workbench for your 
 
 - PORT = On local, you will set it on 3000. Else, follow the credentials given by the database. This port is the localhost port, not the MySQL port I was mentioning previously.
 
-\## Available Scripts
+## Available Scripts
 
 In the project directory, you can run:
 
@@ -124,12 +125,13 @@ teacherben@gmail.com to be registered without "student_only_under_teacher_ken@gm
 
 ## Design Considerations
 
-Error handlers:
+### Error handlers:
 
 - When input is empty
 - When input is false and search returns null. (Teacher or student is unavailable.)
 
-Edge cases :
+### Edge cases :
+
 "1": "POST /api/register" - Only one teacher can be registering to other students
 
 "2": "GET /api/commonstudents" - To throw error if there is a invalid teacher in a multi-teacher scenario.
