@@ -65,8 +65,7 @@ npm install
 npm start
 ```
 
-
-For users are new to MySQL, you can choose to use MySQL Workbench for your MySQL Database.
+For users that are new to MySQL, you can choose to use MySQL Workbench for your MySQL Database.
 
 \- Head over to https://dev.mysql.com/downloads/ to download the MySQL according to your computer's OS.
 
@@ -80,13 +79,13 @@ For users are new to MySQL, you can choose to use MySQL Workbench for your MySQL
 
 - DB_PASSWORD = The password of your account you create your MySQL Schema with.
 
-- PORT = On local, you will set it on 3000. Else, follow the credentials given by the database.
+- PORT = On local, you will set it on 3000. Else, follow the credentials given by the database. This port is the localhost port, not the MySQL port I was mentioning previously.
 
 \## Available Scripts
 
 In the project directory, you can run:
 
-\```
+```
 
 npm start // runs the app in development mode
 
@@ -96,11 +95,11 @@ npm test // runs test runner without watch mode
 
 npm run testc // runs test coverage without watch mode
 
-\```
+```
 
 ## Available Routes
 
-\```
+```
 
     "0": "GET    /",
     "1": "POST   /api/register",
@@ -108,7 +107,7 @@ npm run testc // runs test coverage without watch mode
     "3": "POST   /api/suspend",
     "4": "POST   /api/retrievefornotifications",
 
-\```
+```
 
 ## Things to note
 
@@ -118,24 +117,28 @@ teacher : teacherken@gmail.com, teacherben@gmail.com
 
 student : studentjon@example.com, studenthon@example.com, student_only_under_teacher_ken@gmail.com,
 
-Relation : teacherken@gmail.com to be registered with all three students.
+teachersAndStudents (Relation) :
+teacherken@gmail.com to be registered with all three students.
 
 teacherben@gmail.com to be registered without "student_only_under_teacher_ken@gmail.com".
 
 ## Design Considerations
 
-Error handlers: 
- - When input is empty
- - When input is false and search returns null. (Teacher or student is unavailable.)
- -
+Error handlers:
 
-Edge cases : 
-"1": "POST   /api/register"
-    - Only one teacher can be registering to other students
-"2": "GET   /api/commonstudents"
-    - To throw error if there is a invalid teacher in a multi-teacher scenario.
-"3": "POST   /api/suspend"
-    - To suspend only one student at a time
-"4": "POST   /api/retrievefornotifications"
-    -Able to retrieve students registered to teacher or mentioned that are *not suspended* and *without duplicate names*. 
-    
+- When input is empty
+- When input is false and search returns null. (Teacher or student is unavailable.)
+
+Edge cases :
+"1": "POST /api/register" - Only one teacher can be registering to other students
+
+"2": "GET /api/commonstudents" - To throw error if there is a invalid teacher in a multi-teacher scenario.
+
+"3": "POST /api/suspend" - To suspend only one student at a time
+
+"4": "POST /api/retrievefornotifications"
+-Able to retrieve students registered to teacher or mentioned that are _not suspended_ and _without duplicate names_.
+
+ <br/>
+<div align ="center">Thank you <div>
+ <br/>
