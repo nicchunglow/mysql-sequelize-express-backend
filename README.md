@@ -55,8 +55,7 @@ There are four main functionalities:
 
 To run this project, git clone and install it locally using npm:
 
-\```
-
+```
 cd ..
 
 git clone
@@ -64,8 +63,8 @@ git clone
 npm install
 
 npm start
+```
 
-\```
 
 For users are new to MySQL, you can choose to use MySQL Workbench for your MySQL Database.
 
