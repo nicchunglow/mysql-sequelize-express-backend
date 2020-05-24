@@ -1,5 +1,5 @@
 const studentsComplilation = (onlyStudents) => {
-  const studentsInArr = onlyStudents.map((eachStudent) => {
+  const studentsInArr = onlyStudents.map((eachStudent,index) => {
     return eachStudent["student"];
   });
   return studentsInArr;
@@ -18,4 +18,8 @@ const unavailableTeacherErrorHandler = (teacherResult) => {
   }
 };
 
-module.exports = { studentsComplilation, moreThanOneTeacherErrorHandler , unavailableTeacherErrorHandler};
+module.exports = {
+  studentsComplilation,
+  moreThanOneTeacherErrorHandler,
+  unavailableTeacherErrorHandler,
+};

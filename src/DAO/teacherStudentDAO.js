@@ -84,7 +84,6 @@ const getMentionedStudents = async (notificationInput) => {
     .map((studentEmail) => {
       return studentEmail.substr(1);
     });
-
   const notSuspendedMentionedStudents = await studentModel.findAll({
     where: {
       student: mentionedStudents,

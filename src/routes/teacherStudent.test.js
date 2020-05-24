@@ -136,7 +136,7 @@ describe("/api", () => {
     });
   });
   describe("/retrievefornotifications", () => {
-    it("POST should retrieve information on students inclusive of mentions", async () => {
+    it("POST should retrieve students inclusive of mentions, without duplicates", async () => {
       const expectedData = {
         teacher: "nicholas10@gmail.com",
         notification:
@@ -148,7 +148,6 @@ describe("/api", () => {
           "solokia3@example.com",
           "student_only_under_teacher_ken@gmail.com",
           "solokia2@example.com",
-          "solokia3@example.com",
         ],
       };
       const response = await request(app)

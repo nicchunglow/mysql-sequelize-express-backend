@@ -103,11 +103,15 @@ const retrieveForNotification = async (req, res, next) => {
     const mentionedStudentsResult = await getMentionedStudents(
       notificationInput
     );
+
     const validStudents = registeredStudentsResult.concat(
       mentionedStudentsResult
     );
     const studentList = studentsComplilation(validStudents);
-    const recipients = { recipients: studentList };
+    const uniqueStudents = studentList.filter((name, index) => {
+      return studentList.indexOf(name) === index;
+    });
+    const recipients = { recipients: uniqueStudents };
     res.status(200).send(recipients);
   } catch (err) {
     if (
