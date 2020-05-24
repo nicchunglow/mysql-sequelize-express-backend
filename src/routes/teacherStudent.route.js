@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { studentsComplilation } = require("../utils/helperFunctions");
+const {
+  studentsComplilation,
+  moreThanOneTeacherErrorHandler,
+} = require("../utils/helperFunctions");
 const {
   registerTeacherStudent,
   manyTeachersCommonStudents,
@@ -11,13 +14,10 @@ const {
 } = require("../DAO/teacherStudentDAO");
 
 const registerStudents = async (req, res, next) => {
-  const teacherInput = req.body.teacher;
-  const studentInput = req.body.students;
-  const moreThanOneTeacher = Array.isArray(teacherInput);
   try {
-    if (moreThanOneTeacher) {
-      throw new Error("Only one teacher input allowed.");
-    }
+    const teacherInput = req.body.teacher;
+    const studentInput = req.body.students;
+    moreThanOneTeacherErrorHandler(teacherInput);
     if (!teacherInput || !studentInput) {
       throw new Error("Missing teacher or student input");
     }
@@ -96,6 +96,7 @@ const retrieveForNotification = async (req, res, next) => {
   try {
     const teacherInput = req.body.teacher;
     const notificationInput = req.body.notification;
+    moreThanOneTeacherErrorHandler(teacherInput);
     if (!teacherInput || !notificationInput) {
       throw new Error("Missing teacher or notification input.");
     }

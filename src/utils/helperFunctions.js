@@ -5,4 +5,11 @@ const studentsComplilation = (onlyStudents) => {
   return studentsInArr;
 };
 
-module.exports = { studentsComplilation };
+const moreThanOneTeacherErrorHandler = (teacherInput) => {
+  const moreThanOneTeacher = Array.isArray(teacherInput);
+  if (moreThanOneTeacher) {
+    throw new Error("Only one teacher input allowed.");
+  }
+};
+
+module.exports = { studentsComplilation, moreThanOneTeacherErrorHandler };
