@@ -13,13 +13,13 @@ const {
 const registerStudents = async (req, res, next) => {
   const teacherInput = req.body.teacher;
   const studentInput = req.body.students;
-  const numberOfTeachers = teacherInput.length;
+  const moreThanOneTeacher = Array.isArray(teacherInput);
   try {
+    if (moreThanOneTeacher) {
+      throw new Error("Only one teacher input allowed.");
+    }
     if (!teacherInput || !studentInput) {
       throw new Error("Missing teacher or student input");
-    }
-    if (numberOfTeachers > 1) {
-      throw new Error("Only one teacher input allowed.");
     }
     await registerTeacherStudent(teacherInput, studentInput);
     res.status(204).send();

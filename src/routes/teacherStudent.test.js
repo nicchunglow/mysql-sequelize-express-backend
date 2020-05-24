@@ -46,7 +46,7 @@ describe("/api", () => {
     });
   });
   describe("/commonstudents", () => {
-    it("GET UNMOCKED should get students registered to single teacher if there is only one teacher", async () => {
+    it("GET should get students registered to single teacher if there is only one teacher", async () => {
       const sampleTeacher = "teacher=nicholas10%40gmail.com";
       const sampleData = {
         students: [
@@ -63,7 +63,7 @@ describe("/api", () => {
         .expect(200);
       expect(response.body).toMatchObject(sampleData);
     });
-    it("GET UNMOCKED should get students registered multiple teachers", async () => {
+    it("GET should get students registered multiple teachers", async () => {
       const sampleTeacher =
         "teacher=nicholas1%40gmail.com&teacher=nicholas2%40gmail.com";
       const sampleData = {
@@ -87,6 +87,16 @@ describe("/api", () => {
       const errorMessage = { error: "Teacher input unavailable or invalid." };
       const { body: error } = await request(app)
         .get(`/api/commonstudents?teacher=wrong%40email.com`)
+        .send()
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+    it("GET should throw error if one of the teacher inputs is invalid", async () => {
+      const sampleTeachers =
+        "teacher=nicholas1%40gmail.com&teacher=wrong%teacher.com";
+      const errorMessage = { error: "Teacher input unavailable or invalid." };
+      const { body: error } = await request(app)
+        .get(`/api/commonstudents?${sampleTeachers}`)
         .send()
         .expect(422);
       expect(error).toMatchObject(errorMessage);

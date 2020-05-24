@@ -33,6 +33,9 @@ const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
     having: Sequelize.literal(`COUNT(student) = ${numberofTeachers}`),
     plain: true,
   });
+  if (!allTeacherStudents) {
+    throw new Error("Teacher input unavailable or invalid.");
+  }
   const onlyStudents = allTeacherStudents.students;
   return onlyStudents;
 };
