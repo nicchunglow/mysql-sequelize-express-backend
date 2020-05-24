@@ -114,11 +114,11 @@ npm run testc // runs test coverage without watch mode
 
 To test the code in a local environment, it will be best to include these inputs in your database:
 
-##### teacher : 
+##### teacher :
 
 teacherken@gmail.com, teacherben@gmail.com
 
-##### student : 
+##### student :
 
 studentjon@example.com, studenthon@example.com, student_only_under_teacher_ken@gmail.com,
 
@@ -151,7 +151,7 @@ teacherben@gmail.com to be registered without "student_only_under_teacher_ken@gm
 
 "4": "POST /api/retrievefornotifications"
 
--Able to retrieve students registered to teacher or mentioned that are _not suspended_ and _without duplicate names_.
+- Able to retrieve students registered to teacher or mentioned that are _not suspended_ and _without duplicate names_.
 
  <br/>
 <div align ="center">Thank you <div>
