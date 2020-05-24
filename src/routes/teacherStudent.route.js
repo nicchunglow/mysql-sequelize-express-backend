@@ -36,9 +36,6 @@ const registerStudents = async (req, res, next) => {
 
 const getCommonStudents = async (req, res, next) => {
   const teacherQuery = req.query.teacher;
-  const formatStudentList = (studentList) => {
-    return { students: studentList };
-  };
   try {
     if (!teacherQuery) {
       throw new Error("No teacher input");
@@ -51,7 +48,7 @@ const getCommonStudents = async (req, res, next) => {
         numberofTeachers
       );
       const studentList = studentsComplilation(commonStudents);
-      const formattedStudentList = formatStudentList(studentList);
+      const formattedStudentList = { students: studentList };
       res.send(formattedStudentList);
     } else {
       const oneTeacherStudents = await singleTeacherStudents(teacherQuery);
