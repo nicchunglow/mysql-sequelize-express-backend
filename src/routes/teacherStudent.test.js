@@ -22,7 +22,6 @@ describe("/api", () => {
     });
     it("POST should throw error if there are empty inputs", async () => {
       const expectedData = {
-        teacher: "",
         students: ["studentjon@example.com", "studenthon@example.com"],
       };
       const errorMessage = { error: "Missing teacher or student input" };
@@ -128,6 +127,20 @@ describe("/api", () => {
     it("POST should throw error when student to suspend does not exist", async () => {
       const expectedData = { student: "wrong" };
       const errorMessage = { error: "Student invalid or does not exist." };
+      const { body: error } = await request(app)
+        .post("/api/suspend")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+    it("POST should throw error when more than one student is in input to suspend", async () => {
+      const expectedData = {
+        student: [
+          "studentjon@example.com",
+          "student_only_under_teacher_ken@gmail.com",
+        ],
+      };
+      const errorMessage = { error: "Only one student input allowed." };
       const { body: error } = await request(app)
         .post("/api/suspend")
         .send(expectedData)

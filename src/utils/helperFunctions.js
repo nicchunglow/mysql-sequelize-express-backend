@@ -1,5 +1,5 @@
 const studentsComplilation = (onlyStudents) => {
-  const studentsInArr = onlyStudents.map((eachStudent,index) => {
+  const studentsInArr = onlyStudents.map((eachStudent, index) => {
     return eachStudent["student"];
   });
   return studentsInArr;
@@ -7,7 +7,7 @@ const studentsComplilation = (onlyStudents) => {
 
 const moreThanOneTeacherErrorHandler = (teacherInput) => {
   const moreThanOneTeacher = Array.isArray(teacherInput);
-  if (moreThanOneTeacher) {
+  if (moreThanOneTeacher && teacherInput.length > 1) {
     throw new Error("Only one teacher input allowed.");
   }
 };

@@ -78,8 +78,8 @@ const suspendingStudent = async (studentInput) => {
 const getMentionedStudents = async (notificationInput) => {
   const mentionedStudents = notificationInput
     .split(" ")
-    .filter((word) => {
-      return word.indexOf("@") === 0;
+    .filter((eachStudent) => {
+      return eachStudent.indexOf("@") === 0;
     })
     .map((studentEmail) => {
       return studentEmail.substr(1);

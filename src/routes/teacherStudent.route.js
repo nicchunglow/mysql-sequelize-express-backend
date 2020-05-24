@@ -72,9 +72,13 @@ const getCommonStudents = async (req, res, next) => {
 
 const suspendStudent = async (req, res, next) => {
   const studentInput = req.body.student;
+  const moreThanOneStudent = Array.isArray(studentInput);
   try {
     if (!studentInput) {
       throw new Error("Missing student input.");
+    }
+    if (moreThanOneStudent && studentInput.length > 1) {
+      throw new Error("Only one student input allowed.");
     }
     await suspendingStudent(studentInput);
     res.status(204).send();
