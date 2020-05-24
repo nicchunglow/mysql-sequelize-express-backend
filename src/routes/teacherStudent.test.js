@@ -2,10 +2,6 @@ const request = require("supertest");
 const app = require("../app");
 
 describe("/api", () => {
-  afterEach(async () => {
-    await jest.resetAllMocks();
-  });
-
   describe("/register", () => {
     it("POST should register the teacher and student input with status 204 without showing any information", async () => {
       const expectedData = {
@@ -31,7 +27,7 @@ describe("/api", () => {
     });
     it("POST should throw error if there are more than one teacher inputs", async () => {
       const expectedData = {
-        teacher: ["nicholas2@gmail.com", "nicholas3@gmail.com"],
+        teacher: ["teacherken@gmail.com", "teacherben@gmail.com"],
         students: ["studentjon@example.com", "studenthon@example.com"],
       };
       const errorMessage = { error: "Only one teacher input allowed." };
@@ -44,16 +40,14 @@ describe("/api", () => {
   });
   describe("/commonstudents", () => {
     it("GET should get students registered to single teacher if there is only one teacher", async () => {
-      const sampleTeacherQuery = "teacher=nicholas10%40gmail.com";
-      const sampleTeacher = "nicholas10@gmail.com";
+      const sampleTeacherQuery = "teacher=teacherken%40gmail.com";
+      const sampleTeacher = "teacherken@gmail.com";
       const sampleData = {
         teacher: sampleTeacher,
         students: [
-          "studentdick@example.com",
-          "studentharry@example.com",
-          "studentjon@gmail.com",
-          "solokia3@example.com",
           "student_only_under_teacher_ken@gmail.com",
+          "studenthon@example.com",
+          "studentjon@example.com",
         ],
       };
       const response = await request(app)
@@ -64,9 +58,9 @@ describe("/api", () => {
     });
     it("GET should get students registered multiple teachers", async () => {
       const sampleTeacher =
-        "teacher=nicholas1%40gmail.com&teacher=nicholas2%40gmail.com";
+        "teacher=teacherken%40gmail.com&teacher=teacherben%40gmail.com";
       const sampleData = {
-        students: ["studentdick@example.com", "studentharry@example.com"],
+        students: ["studenthon@example.com", "studentjon@example.com"],
       };
       const response = await request(app)
         .get(`/api/commonstudents?${sampleTeacher}`)
@@ -92,7 +86,7 @@ describe("/api", () => {
     });
     it("GET should throw error if one of the teacher inputs is invalid", async () => {
       const sampleTeachers =
-        "teacher=nicholas1%40gmail.com&teacher=wrong%teacher.com";
+        "teacher=teacherken%40gmail.com&teacher=wrong%teacher.com";
       const errorMessage = { error: "Teacher input unavailable or invalid." };
       const { body: error } = await request(app)
         .get(`/api/commonstudents?${sampleTeachers}`)
@@ -106,7 +100,6 @@ describe("/api", () => {
       const expectedData = {
         student: "studentjon@example.com",
       };
-      const errorMessage = { error: "Teacher input unavailable or invalid." };
       const response = await request(app)
         .post("/api/suspend")
         .send(expectedData)
@@ -133,10 +126,7 @@ describe("/api", () => {
     });
     it("POST should throw error when more than one student is in input to suspend", async () => {
       const expectedData = {
-        student: [
-          "studentjon@example.com",
-          "student_only_under_teacher_ken@gmail.com",
-        ],
+        student: ["studentjon@example.com", "studenthon@example.com"],
       };
       const errorMessage = { error: "Only one student input allowed." };
       const { body: error } = await request(app)
@@ -149,16 +139,14 @@ describe("/api", () => {
   describe("/retrievefornotifications", () => {
     it("POST should retrieve students inclusive of mentions, without duplicates", async () => {
       const expectedData = {
-        teacher: "nicholas10@gmail.com",
+        teacher: "teacherben@gmail.com",
         notification:
-          "Hello students! @solokia2@example.com @solokia3@example.com",
+          "Hello students! @student_only_under_teacher_ken@gmail.com",
       };
       const expectedResult = {
         recipients: [
-          "studentjon@gmail.com",
-          "solokia3@example.com",
+          "studenthon@example.com",
           "student_only_under_teacher_ken@gmail.com",
-          "solokia2@example.com",
         ],
       };
       const response = await request(app)
@@ -191,7 +179,7 @@ describe("/api", () => {
     });
     it("POST should throw error when mentions are unavailable", async () => {
       const expectedData = {
-        teacher: "nicholas10@gmail.com",
+        teacher: "teacherben@gmail.com",
         notification: "Hello students! @wrongStudent@gmail.com",
       };
       const errorMessage = { error: "Not all students mentioned are found." };
