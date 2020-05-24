@@ -110,8 +110,8 @@ const retrieveForNotification = async (req, res, next) => {
       mentionedStudentsResult
     );
     const studentList = studentsComplilation(validStudents);
-    const recipents = { recipents: studentList };
-    res.status(200).send(recipents);
+    const recipients = { recipients: studentList };
+    res.status(200).send(recipients);
   } catch (err) {
     if (
       err.message === "Missing teacher or notification input." ||

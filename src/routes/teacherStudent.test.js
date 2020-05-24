@@ -143,7 +143,7 @@ describe("/api", () => {
           "Hello students! @solokia2@example.com @solokia3@example.com",
       };
       const expectedResult = {
-        recipents: [
+        recipients: [
           "studentjon@gmail.com",
           "solokia3@example.com",
           "student_only_under_teacher_ken@gmail.com",
