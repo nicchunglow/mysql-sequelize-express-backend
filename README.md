@@ -69,7 +69,7 @@ For users that are new to MySQL, you can choose to use MySQL Workbench for your 
 
 - Head over to https://dev.mysql.com/downloads/ to download the MySQL according to your computer's OS.
 
-_note_
+_Note_ :
 You may face an issue with MySQL default port unable to set at 3306. Just change to another port number (e.g 3300) and you will be able to continue using MySQL.
 
 ## Environment Variables
@@ -114,11 +114,16 @@ npm run testc // runs test coverage without watch mode
 
 To test the code in a local environment, it will be best to include these inputs in your database:
 
-teacher : teacherken@gmail.com, teacherben@gmail.com
+##### teacher : 
 
-student : studentjon@example.com, studenthon@example.com, student_only_under_teacher_ken@gmail.com,
+teacherken@gmail.com, teacherben@gmail.com
 
-teachersAndStudents (Relation) :
+##### student : 
+
+studentjon@example.com, studenthon@example.com, student_only_under_teacher_ken@gmail.com,
+
+##### teachersAndStudents (Relation) :
+
 teacherken@gmail.com to be registered with all three students.
 
 teacherben@gmail.com to be registered without "student_only_under_teacher_ken@gmail.com".
@@ -132,13 +137,20 @@ teacherben@gmail.com to be registered without "student_only_under_teacher_ken@gm
 
 ### Edge cases :
 
-"1": "POST /api/register" - Only one teacher can be registering to other students
+"1": "POST /api/register"
 
-"2": "GET /api/commonstudents" - To throw error if there is a invalid teacher in a multi-teacher scenario.
+- Only one teacher can be registering to other students
 
-"3": "POST /api/suspend" - To suspend only one student at a time
+"2": "GET /api/commonstudents"
+
+- To throw error if there is a invalid teacher in a multi-teacher scenario.
+
+"3": "POST /api/suspend"
+
+- To suspend only one student at a time
 
 "4": "POST /api/retrievefornotifications"
+
 -Able to retrieve students registered to teacher or mentioned that are _not suspended_ and _without duplicate names_.
 
  <br/>
