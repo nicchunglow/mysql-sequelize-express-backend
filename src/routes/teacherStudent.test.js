@@ -7,6 +7,7 @@ describe("/api", () => {
   afterEach(async () => {
     await jest.resetAllMocks();
   });
+
   describe("/register", () => {
     it("POST should register the teacher and student input with status 204 without showing any information", async () => {
       const expectedData = {
@@ -25,6 +26,18 @@ describe("/api", () => {
         students: ["studentjon@example.com", "studenthon@example.com"],
       };
       const errorMessage = { error: "Missing teacher or student input" };
+      const { body: error } = await request(app)
+        .post("/api/register")
+        .send(expectedData)
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+    it("POST should throw error if there are more than one teacher inputs", async () => {
+      const expectedData = {
+        teacher: ["nicholas2@gmail.com", "nicholas3@gmail.com"],
+        students: ["studentjon@example.com", "studenthon@example.com"],
+      };
+      const errorMessage = { error: "Only one teacher input allowed." };
       const { body: error } = await request(app)
         .post("/api/register")
         .send(expectedData)
@@ -62,22 +75,22 @@ describe("/api", () => {
         .expect(200);
       expect(response.body).toMatchObject(sampleData);
     });
-  });
-  it("GET should throw error if there is no teacher input", async () => {
-    const errorMessage = { error: "No teacher input" };
-    const { body: error } = await request(app)
-      .get(`/api/commonstudents?teacher=`)
-      .send()
-      .expect(422);
-    expect(error).toMatchObject(errorMessage);
-  });
-  it("GET should throw error if teacher input is unavailable or invalid", async () => {
-    const errorMessage = { error: "Teacher input unavailable or invalid." };
-    const { body: error } = await request(app)
-      .get(`/api/commonstudents?teacher=wrong%40email.com`)
-      .send()
-      .expect(422);
-    expect(error).toMatchObject(errorMessage);
+    it("GET should throw error if there is no teacher input", async () => {
+      const errorMessage = { error: "No teacher input" };
+      const { body: error } = await request(app)
+        .get(`/api/commonstudents?teacher=`)
+        .send()
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
+    it("GET should throw error if teacher input is unavailable or invalid", async () => {
+      const errorMessage = { error: "Teacher input unavailable or invalid." };
+      const { body: error } = await request(app)
+        .get(`/api/commonstudents?teacher=wrong%40email.com`)
+        .send()
+        .expect(422);
+      expect(error).toMatchObject(errorMessage);
+    });
   });
   describe("/suspend", () => {
     it("POST should return a status 204 when a student is suspended", async () => {
@@ -126,7 +139,6 @@ describe("/api", () => {
           "solokia3@example.com",
         ],
       };
-
       const response = await request(app)
         .post("/api/retrievefornotifications")
         .send(expectedData)

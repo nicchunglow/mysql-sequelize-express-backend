@@ -13,14 +13,21 @@ const {
 const registerStudents = async (req, res, next) => {
   const teacherInput = req.body.teacher;
   const studentInput = req.body.students;
+  const numberOfTeachers = teacherInput.length;
   try {
     if (!teacherInput || !studentInput) {
       throw new Error("Missing teacher or student input");
     }
+    if (numberOfTeachers > 1) {
+      throw new Error("Only one teacher input allowed.");
+    }
     await registerTeacherStudent(teacherInput, studentInput);
     res.status(204).send();
   } catch (err) {
-    if (err.message === "Missing teacher or student input") {
+    if (
+      err.message === "Missing teacher or student input" ||
+      "Only one teacher input allowed."
+    ) {
       err.statusCode = 422;
     }
     next(err);
@@ -29,11 +36,11 @@ const registerStudents = async (req, res, next) => {
 
 const getCommonStudents = async (req, res, next) => {
   const teacherQuery = req.query.teacher;
-  const numberofTeachers = teacherQuery.length;
   try {
     if (!teacherQuery) {
       throw new Error("No teacher input");
     }
+    const numberofTeachers = teacherQuery.length;
     const moreThanOneTeacher = Array.isArray(teacherQuery);
     if (moreThanOneTeacher) {
       const listOfStudents = await manyTeachersCommonStudent(
