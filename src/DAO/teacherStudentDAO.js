@@ -9,14 +9,14 @@ const registerTeacherStudent = async (teacherInput, studentInput) => {
       teacher: teacherInput,
     },
   });
-  studentInput.forEach(async (student) => {
+  for (let i = 0; i < studentInput.length; i++) {
     const [registeredStudent, created] = await studentModel.findOrCreate({
       where: {
-        student: student,
+        student: studentInput[i],
       },
     });
     await registeredStudent.addTeacher(registeredTeacher);
-  });
+  }
 };
 
 const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
@@ -65,7 +65,7 @@ const suspendingStudent = async (studentInput) => {
   if (!findStudent) {
     throw new Error("Student invalid or does not exist.");
   }
-  const suspendedStudent = await studentModel.update(
+  await studentModel.update(
     {
       suspended: true,
     },
