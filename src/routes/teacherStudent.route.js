@@ -38,19 +38,26 @@ const registerStudents = async (req, res, next) => {
 
 const getCommonStudents = async (req, res, next) => {
   const teacherQuery = req.query.teacher;
+  const numberofTeachers = teacherQuery.length;
   try {
     if (!teacherQuery) {
       throw new Error("No teacher input");
     }
-    const numberofTeachers = teacherQuery.length;
     const moreThanOneTeacher = Array.isArray(teacherQuery);
     if (moreThanOneTeacher) {
-      const commonStudents = await manyTeachersCommonStudents(
-        teacherQuery,
-        numberofTeachers
-      );
-      const studentList = studentsComplilation(commonStudents);
-      const formattedStudentList = { students: studentList };
+      const studentData = await manyTeachersCommonStudents(teacherQuery);
+      const studentList = studentsComplilation(studentData);
+      const studentCountObj = {};
+      studentList.map((name) => {
+        studentCountObj[name] = (studentCountObj[name] || 0) + 1;
+      });
+      const commonStudents = [];
+      for (const [key, value] of Object.entries(studentCountObj)) {
+        if (value === numberofTeachers) {
+          commonStudents.push(key);
+        }
+      }
+      const formattedStudentList = { students: commonStudents };
       res.send(formattedStudentList);
     } else {
       const oneTeacherStudents = await singleTeacherStudents(teacherQuery);

@@ -19,24 +19,24 @@ const registerTeacherStudent = async (teacherInput, studentInput) => {
   }
 };
 
-const manyTeachersCommonStudents = async (teacherQuery, numberofTeachers) => {
-  const allTeacherStudents = await teacherModel.findAll({
-    where: {
-      teacher: teacherQuery,
-    },
-    attributes: ["teacher"],
-    include: {
-      model: studentModel,
-      attributes: ["student"],
-      through: { attributes: [] },
-    },
-    group: ["student"],
-    having: Sequelize.literal(`count(student) = ${numberofTeachers}`),
-    plain: true,
-  });
-  unavailableTeacherErrorHandler(allTeacherStudents);
-  const onlyStudents = allTeacherStudents.students;
-  return onlyStudents;
+const manyTeachersCommonStudents = async (teacherQuery) => {
+  const allTeacherStudents = [];
+  for (let i = 0; i < teacherQuery.length; i++) {
+    const perTeacherStudent = await teacherModel.findOne({
+      where: {
+        teacher: teacherQuery[i],
+      },
+      attributes: [],
+      include: {
+        model: studentModel,
+        attributes: ["student"],
+        through: { attributes: [] },
+      },
+    });
+    unavailableTeacherErrorHandler(perTeacherStudent);
+    allTeacherStudents.push(perTeacherStudent.students);
+  }
+  return allTeacherStudents.flat();
 };
 
 const singleTeacherStudents = async (teacherQuery) => {
