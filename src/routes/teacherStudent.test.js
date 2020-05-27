@@ -45,9 +45,9 @@ describe("/api", () => {
       const sampleData = {
         teacher: sampleTeacher,
         students: [
-          "student_only_under_teacher_ken@gmail.com",
-          "studenthon@example.com",
           "studentjon@example.com",
+          "studenthon@example.com",
+          "student_only_under_teacher_ken@gmail.com",
         ],
       };
       const response = await request(app)
@@ -60,7 +60,7 @@ describe("/api", () => {
       const sampleTeacher =
         "teacher=teacherken%40gmail.com&teacher=teacherben%40gmail.com";
       const sampleData = {
-        students: ["studenthon@example.com", "studentjon@example.com"],
+        students: ["studentjon@example.com", "studenthon@example.com"],
       };
       const response = await request(app)
         .get(`/api/commonstudents?${sampleTeacher}`)
