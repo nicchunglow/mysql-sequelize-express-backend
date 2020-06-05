@@ -1,4 +1,4 @@
-# Ufinity assessment
+# MySQL Sequelize Express Backend
 
 ##### By Nicholas Chung
 
